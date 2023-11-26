@@ -1,18 +1,4 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
+/* eslint-disable react/prop-types */
 import { useMemo, useEffect, useState } from "react";
 
 // prop-types is a library for typechecking of props
@@ -47,6 +33,9 @@ function DataTable({
   pagination,
   isSorted,
   noEndBorder,
+  search,
+  setSearch,
+  doSearch,
 }) {
   const defaultValue = entriesPerPage.defaultValue ? entriesPerPage.defaultValue : 10;
   const entries = entriesPerPage.entries
@@ -109,12 +98,12 @@ function DataTable({
   const handleInputPaginationValue = ({ target: value }) => gotoPage(Number(value.value - 1));
 
   // Search input value state
-  const [search, setSearch] = useState(globalFilter);
+  // const [search, setSearch] = useState(globalFilter);
 
   // Search input state handle
   const onSearchChange = useAsyncDebounce((value) => {
-    setGlobalFilter(value || undefined);
-  }, 100);
+    doSearch({ search: value });
+  }, 1000);
 
   // A function that sets the sorted value for the table
   const setSortedValue = (column) => {
@@ -175,9 +164,10 @@ function DataTable({
                 size="small"
                 fullWidth
                 onChange={({ currentTarget }) => {
-                  setSearch(search);
+                  setSearch(currentTarget.value);
                   onSearchChange(currentTarget.value);
                 }}
+                on
               />
             </MDBox>
           )}
